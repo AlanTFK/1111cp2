@@ -4,8 +4,8 @@
 
 typedef struct point{
     int inte;
-    bool conflict;
     struct point* next;
+    struct point* pre
 }point;
 
 int main(){
@@ -14,16 +14,16 @@ int main(){
 
     point* curr;
     point head;
-    
+
     curr = &head;
-    head.inte = temp;
-    head.conflict = false;
-    head.next = NULL;
+    curr->inte = temp;
+    curr->next = NULL;
+    curr->pre = NULL;
 
     while(scanf("%d", &temp) != EOF){
         point* tmp = malloc(sizeof(point)) ;
         tmp->inte = temp;
-        tmp->conflict = false;
+        tmp->pre = curr;
         tmp->next = NULL;
         curr->next = tmp;
         curr = curr->next;
@@ -31,46 +31,41 @@ int main(){
     }
 
     curr->next = &head;
+    curr->next->pre = curr;
     curr = curr->next;
 
-    /*do{
-        printf("%d ", curr->inte);
+    int tmpA = 0, m = n, arr[n];
+
+    arr[--m] = curr->pre->inte;
+    curr = curr->pre;
+
+    do{
+        tmpA += curr->inte;
+        if(arr[m] > tmpA) arr[m-1] = arr[m];
+        else arr[m-1] = tmpA;
+        curr = curr->pre;
+        --m;
+    }while(curr != &head);
+
+    int tmpB = curr->inte, tmpC = tmpA = 0, ans = 0;
+    do{
+        tmpC += curr->inte;
+        if(tmpC <= 0) tmpC = 0;
+        if(tmpC > ans) ans = tmpC;
+    
+        tmpA += curr->inte;
+        if(m+1 < n){
+            if(tmpB > (tmpA + arr[m+1])) tmpB = tmpB;
+            else tmpB = tmpA + arr[m+1];
+        }
+        ++m;
         curr = curr->next;
     }while(curr != &head);
-    */
-    int tmpA = 0, tmpC = 0, ans = 0, m = 0;
-    do{
-        if(curr->inte >= 0){
-            tmpA += curr->inte;
-            if(tmpA > ans)
-                ans = tmpA;
-        }
-        else tmpA = 0;
-
-        tmpC += curr->inte;
-        if(tmpC < 1) tmpC = 0;
-        if(tmpC > ans) ans = tmpC;
-
-        curr = curr->next;
-        ++n;
-    }while(curr != &head);
     
-    do{
-        if(curr->inte >= 0){
-            tmpA += curr->inte;
-            if(tmpA > ans)
-                ans = tmpA;
-        }
-        else tmpA = 0;
+    if(ans > tmpB) ans = ans;
+    else ans = tmpB;
+  
+    printf("%d\n" , ans);
 
-        tmpC += curr->inte;
-        if(tmpC < 1) tmpC = 0;
-        if(tmpC > ans) ans = tmpC;
-
-        curr = curr->next;
-        m++;
-    }while(n/2 != m);
-    printf("%d" , ans);
-    
-    return 0; 
+    return 0;
 }
