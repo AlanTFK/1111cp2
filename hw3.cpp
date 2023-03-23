@@ -2,7 +2,7 @@
 using namespace std;
 
 int main(){
-    int num;
+    int buildingNum;
     cin >> buildingNum;
     vector<int> building;
 
@@ -13,16 +13,23 @@ int main(){
     }
 
     for(int i = 0; i < buildingNum - 1; ++i){
-        int CBuilding = 1;
+        int CBuilding = 0;
         int tmpBuilding = building[i+1];
-        for(int j = i + 1; j < buildingNum && building[i] > building[j]; ++j){
-            if(building[j] > tmpBuilding){
-                tmpBuilding = building[j];
+        for(int j = i + 1; j < buildingNum; ++j){
+            if(building[j] > building[i]){
                 ++CBuilding;
+                break;
+            }      
+            else if(i+1 == j)
+                    ++CBuilding;
+            else if(building[j] > tmpBuilding){
+                    tmpBuilding = building[j];
+                    ++CBuilding;
             }
         }
         cout << CBuilding << " ";
     }
-        
+    
+    cout << "0 ";
     return 0;
 }
